@@ -21,8 +21,6 @@ namespace WinFormSaveRestoreFormPosition
         const string KEY_HEIGHT = "Height";
         const string KEY_MAXIMIZED = "Maximized";
 
-        bool _maxed;
-        int _x, _y, _width, _height;
         FormWindowState _lastWindowState;
         bool _isMinimizedFromMaximized;
         string IniPath
@@ -50,12 +48,6 @@ namespace WinFormSaveRestoreFormPosition
         public Form1()
         {
             InitializeComponent();
-
-            Profile.GetBool(SECTION_LOCATION, KEY_MAXIMIZED, false, out _maxed, IniPath);
-            Profile.GetInt(SECTION_LOCATION, KEY_X, 0, out _x, IniPath);
-            Profile.GetInt(SECTION_LOCATION, KEY_Y, 0, out _y, IniPath);
-            Profile.GetInt(SECTION_LOCATION, KEY_WIDTH, 640, out _width, IniPath);
-            Profile.GetInt(SECTION_LOCATION, KEY_HEIGHT, 480, out _height, IniPath);
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -86,16 +78,25 @@ namespace WinFormSaveRestoreFormPosition
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            if (_maxed)
+            bool maxed;
+            int x, y, width, height;
+
+            Profile.GetBool(SECTION_LOCATION, KEY_MAXIMIZED, false, out maxed, IniPath);
+            Profile.GetInt(SECTION_LOCATION, KEY_X, 0, out x, IniPath);
+            Profile.GetInt(SECTION_LOCATION, KEY_Y, 0, out y, IniPath);
+            Profile.GetInt(SECTION_LOCATION, KEY_WIDTH, 640, out width, IniPath);
+            Profile.GetInt(SECTION_LOCATION, KEY_HEIGHT, 480, out height, IniPath);
+
+            if (maxed)
             {
-                Location = new Point(_x, _y);
-                Size = new Size(_width, _height);
+                Location = new Point(x, y);
+                Size = new Size(width, height);
                 WindowState = FormWindowState.Maximized;
             }
             else
             {
-                Location = Location = new Point(_x, _y);
-                Size = new Size(_width, _height);
+                Location = Location = new Point(x, y);
+                Size = new Size(width, height);
             }
         }
     }
